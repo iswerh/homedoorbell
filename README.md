@@ -5,9 +5,10 @@ relay). React Native + Expo (TypeScript), Expo Router with a bottom-tab layout.
 
 **Local-network MVP**: the app talks directly to the doorbell's IP over WiFi —
 no cloud, no push notifications. Alerts only fire while the app is open and
-polling; that's a documented limitation, not a bug. There is no ESP32/Arduino
-firmware in this repo — the app is built against a REST contract (below) that
-real firmware implements, and a mock server stands in for it during development.
+polling; that's a documented limitation, not a bug. Firmware for both boards
+lives in `firmware/` (see its README for wiring/flashing); the app is built
+against the REST contract below, and a mock server stands in for the hardware
+during development.
 
 ## Prerequisites
 
