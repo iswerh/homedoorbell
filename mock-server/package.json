@@ -1,0 +1,14 @@
+{
+  "name": "doorbell-mock-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mock ESP32-CAM doorbell server implementing the app's REST contract",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jimp": "^0.22.12"
+  }
+}
