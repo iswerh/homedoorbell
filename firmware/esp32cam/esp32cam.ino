@@ -8,14 +8,15 @@
  *   POST /settings   -> update the above (JSON body)
  *   POST /unlock     -> pulses UNLOCK_OUT_PIN, ends the ring/stream session
  *
- * Hardware: AI-Thinker ESP32-CAM. RING_IN_PIN is wired to the doorbell
- * Arduino's SIGNAL_PIN (goes HIGH while the button is held). UNLOCK_OUT_PIN
- * is wired to a new input pin on that same Arduino, which drives the door
- * relay. See ../README.md for the wiring diagram and why GPIO 12/13 were
- * chosen (they're the SD-card pins, free here since we don't use SD storage).
+ * Hardware: ESP-WROVER-KIT. RING_IN_PIN is wired to the doorbell Arduino's
+ * SIGNAL_PIN (goes HIGH while the button is held). UNLOCK_OUT_PIN is wired
+ * to a new input pin on that same Arduino, which drives the door relay.
+ * See ../README.md for the wiring diagram and why GPIO 32/33 were chosen
+ * (the WROVER-KIT wires GPIO 12-15 to its onboard JTAG debug interface, so
+ * those are best avoided even though they're free on other ESP32-CAM boards).
  *
  * Libraries needed (Arduino Library Manager): ArduinoJson (Benoit Blanchon).
- * Board package: "esp32" by Espressif — select board "AI Thinker ESP32-CAM".
+ * Board package: "esp32" by Espressif — select board "ESP-WROVER-KIT".
  */
 
 #include <WiFi.h>
@@ -31,8 +32,8 @@ const char *WIFI_SSID = "YOUR_WIFI_SSID";
 const char *WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
 
 // ---- Pins bridging to the doorbell Arduino ----
-const int RING_IN_PIN = 13;      // HIGH while the doorbell button is pressed
-const int UNLOCK_OUT_PIN = 12;   // pulsed HIGH to tell the Arduino to fire the relay
+const int RING_IN_PIN = 32;      // HIGH while the doorbell button is pressed
+const int UNLOCK_OUT_PIN = 33;   // pulsed HIGH to tell the Arduino to fire the relay
 const unsigned long UNLOCK_PULSE_MS = 800;
 
 // ---- Defaults (overridden by whatever was last saved via /settings) ----

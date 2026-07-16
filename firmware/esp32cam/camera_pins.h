@@ -1,11 +1,12 @@
-// Standard AI-Thinker ESP32-CAM pin mapping (the module used by nearly every
-// cheap "ESP32-CAM" board). If you're on a different ESP32 camera board
-// (ESP-EYE, M5Stack, TTGO T-Journal, etc.) swap this file for that board's
-// pin map from the Arduino ESP32 "CameraWebServer" example.
+// ESP-WROVER-KIT camera pin mapping. PWDN/RESET are -1 (not wired) — the
+// WROVER-KIT's camera connector doesn't expose those lines, so the driver
+// just leaves the camera always powered and never resets it in software.
+// If you swap boards later (AI-Thinker, ESP-EYE, etc.), replace this file
+// with that board's pin map from the Arduino ESP32 "CameraWebServer" example.
 
-#define PWDN_GPIO_NUM     32
+#define PWDN_GPIO_NUM     -1
 #define RESET_GPIO_NUM    -1
-#define XCLK_GPIO_NUM      0
+#define XCLK_GPIO_NUM     21
 #define SIOD_GPIO_NUM     26
 #define SIOC_GPIO_NUM     27
 
@@ -13,10 +14,10 @@
 #define Y8_GPIO_NUM       34
 #define Y7_GPIO_NUM       39
 #define Y6_GPIO_NUM       36
-#define Y5_GPIO_NUM       21
-#define Y4_GPIO_NUM       19
-#define Y3_GPIO_NUM       18
-#define Y2_GPIO_NUM        5
+#define Y5_GPIO_NUM       19
+#define Y4_GPIO_NUM       18
+#define Y3_GPIO_NUM        5
+#define Y2_GPIO_NUM        4
 #define VSYNC_GPIO_NUM    25
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22

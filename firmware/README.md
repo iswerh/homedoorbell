@@ -2,7 +2,7 @@
 
 Two boards, wired together:
 
-- **`esp32cam/`** — AI-Thinker ESP32-CAM. Runs the camera + WiFi + HTTP server
+- **`esp32cam/`** — ESP-WROVER-KIT. Runs the camera + WiFi + HTTP server
   implementing the app's contract (`/status`, `/stream`, `/capture`,
   `/settings`, `/unlock`).
 - **`arduino_doorbell/`** — a plain Arduino (Uno/Nano). Reads the physical
@@ -16,19 +16,20 @@ IP address. The Arduino is a dumb I/O bridge.
 
 | Signal              | Arduino pin | ESP32-CAM pin | Direction         |
 |---------------------|-------------|----------------|--------------------|
-| Ring signal          | 3 (`SIGNAL_PIN`) | 13 (`RING_IN_PIN`) | Arduino → ESP32-CAM |
-| Unlock signal        | 4 (`UNLOCK_IN_PIN`) | 12 (`UNLOCK_OUT_PIN`) | ESP32-CAM → Arduino |
+| Ring signal          | 3 (`SIGNAL_PIN`) | 32 (`RING_IN_PIN`) | Arduino → ESP32-CAM |
+| Unlock signal        | 4 (`UNLOCK_IN_PIN`) | 33 (`UNLOCK_OUT_PIN`) | ESP32-CAM → Arduino |
 | Common ground        | GND | GND | — (required — connect grounds together) |
 
 Also on the Arduino: button on pin 2, status LED on pin 13, relay module on
 pin 5 (see `RELAY_ACTIVE_HIGH` in the sketch — most cheap relay boards trigger
 on LOW; flip that constant if your relay clicks on the wrong edge).
 
-GPIO 12 and 13 were picked on the ESP32-CAM because they're the SD-card pins
-(CMD/D1), which are free as plain GPIO since this firmware doesn't use the SD
-card. Almost every other pin on that module is already claimed by the camera
-or PSRAM — don't repurpose pins outside 2/4/12/13/14/15 without checking
-`camera_pins.h` first.
+GPIO 32/33 were picked on the ESP-WROVER-KIT because they're general-purpose
+and free of onboard conflicts. Avoid GPIO 12-15 on this board specifically —
+the WROVER-KIT wires those to its onboard JTAG debug interface, unlike bare
+ESP32-CAM modules where they're just free SD-card pins. Also avoid 0/2 (boot
+strapping), 1/3 (onboard USB-serial console), 16/17 (PSRAM), and anything
+listed in `camera_pins.h` (the camera connector itself).
 
 **Voltage note**: the ESP32-CAM's GPIOs are 3.3V. Most Arduino Uno/Nano boards
 are 5V logic. Feeding a 5V HIGH into an ESP32 GPIO can damage it — use a
@@ -40,9 +41,9 @@ and unlock signal), not a direct wire, unless your Arduino is also a 3.3V board.
 **ESP32-CAM** (`esp32cam/esp32cam.ino`):
 1. Arduino IDE → install the `esp32` board package (Espressif) via Boards Manager.
 2. Install the `ArduinoJson` library (Benoit Blanchon) via Library Manager.
-3. Board: "AI Thinker ESP32-CAM". You'll need an FTDI/USB-serial adapter — the
-   board has no onboard USB. Connect GPIO0 to GND to enter flash mode, reset,
-   upload, then disconnect GPIO0 from GND and reset again to run normally.
+3. Board: "ESP-WROVER-KIT". Unlike bare ESP32-CAM modules, the WROVER-KIT has
+   onboard USB-serial and auto-reset circuitry, so you can just select the
+   right COM port and upload — no manual GPIO0-to-GND flash-mode dance needed.
 4. Edit `WIFI_SSID` / `WIFI_PASSWORD` at the top of the file first.
 5. Open the Serial Monitor at 115200 baud — it prints the camera's IP once
    connected. That's what goes into the app's Settings → Doorbell Connection.
