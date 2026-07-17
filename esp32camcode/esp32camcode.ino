@@ -169,7 +169,8 @@ void handleUnlock() {
 // Testing aid, not part of the app's contract: starts a ring session the
 // same way a real RING_IN_PIN edge would, so you can test the camera +
 // app pipeline before the Arduino/button are wired up at all.
-//   curl -X POST http://<esp32-ip>/debug/ring
+// Accepts GET too so it can be triggered by just opening the URL in a browser:
+//   http://<esp32-ip>/debug/ring
 void handleDebugRing() {
   if (!ringActive) {
     ringActive = true;
@@ -255,6 +256,15 @@ void setupCamera() {
     delay(3000);
     ESP.restart();
   }
+
+  // Some AI-Thinker boards ship an OV3660 instead of the usual OV2640.
+  // Without this it comes out flipped with a strong red/pink cast.
+  sensor_t *s = esp_camera_sensor_get();
+  if (s && s->id.PID == OV3660_PID) {
+    s->set_vflip(s, 1);
+    s->set_brightness(s, 1);
+    s->set_saturation(s, -2);
+  }
 }
 
 void setup() {
@@ -286,6 +296,7 @@ void setup() {
   server.on("/unlock", HTTP_POST, handleUnlock);
   server.on("/stream", HTTP_GET, handleStream);
   server.on("/debug/ring", HTTP_POST, handleDebugRing);
+  server.on("/debug/ring", HTTP_GET, handleDebugRing);
   server.onNotFound(handleNotFound);
   server.begin();
 }

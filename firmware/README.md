@@ -69,10 +69,11 @@ its logic — each has a software-only way to simulate a press:
 - **Arduino**: open the Serial Monitor (9600 baud) and type `r` + Enter. This
   calls the exact same `buttonPressedActions()`/`buttonReleasedActions()` a
   real press would, including the `SIGNAL_PIN` pulse to the ESP32-CAM.
-- **ESP32-CAM**: `curl -X POST http://<esp32-ip>/debug/ring` starts a ring
-  session exactly like a real `RING_IN_PIN` edge would — this exercises the
-  real camera, `/status`, `/stream`, and the app's face-match pipeline without
-  the Arduino connected at all.
+- **ESP32-CAM**: open `http://<esp32-ip>/debug/ring` in any browser (or
+  `curl -X POST http://<esp32-ip>/debug/ring` — it accepts both GET and POST)
+  to start a ring session exactly like a real `RING_IN_PIN` edge would. This
+  exercises the real camera, `/status`, `/stream`, and the app's face-match
+  pipeline without the Arduino connected at all.
 
 Both are debug-only additions (clearly marked in the code, not part of the
 app's contract) — safe to leave in, since there's no auth on this LAN-only
