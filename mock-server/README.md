@@ -11,7 +11,7 @@ full integration contract:
 | `/capture`       | GET    | Single JPEG snapshot (current stream frame)                              |
 | `/settings`      | GET    | `{ brightness, contrast, saturation, streamDurationSec }`                |
 | `/settings`      | POST   | Update any of the above (JSON body, numbers only)                        |
-| `/unlock`        | POST   | Logs a relay pulse and ends the ring session                             |
+| `/unlock`        | POST   | Logs a door-lock actuation and ends the ring session                     |
 | `/simulate-ring` | POST   | **Dev-only** — simulates a doorbell press (`ringing: true`, `since: now`) |
 
 A ring session ends automatically after `streamDurationSec` seconds, or

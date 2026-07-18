@@ -9,10 +9,11 @@
  *   POST /unlock     -> pulses UNLOCK_OUT_PIN, ends the ring/stream session
  *
  * Hardware: AI-Thinker ESP32-CAM. RING_IN_PIN is wired to the doorbell
- * Arduino's SIGNAL_PIN (goes HIGH while the button is held). UNLOCK_OUT_PIN
- * is wired to a new input pin on that same Arduino, which drives the door
- * relay. See ../README.md for the wiring diagram and why GPIO 12/13 were
- * chosen (they're the SD-card pins, free here since we don't use SD storage).
+ * ESP32-S3 controller's SIGNAL_PIN (goes HIGH while the button is held).
+ * UNLOCK_OUT_PIN is wired to that same board's UNLOCK_IN_PIN, which drives
+ * the door-lock servo directly (no relay). See ../README.md for the wiring
+ * diagram and why GPIO 12/13 were chosen (they're the SD-card pins, free
+ * here since we don't use SD storage).
  *
  * Libraries needed (Arduino Library Manager): ArduinoJson (Benoit Blanchon).
  * Board package: "esp32" by Espressif — select board "AI Thinker ESP32-CAM".
@@ -29,9 +30,9 @@
 // ---- Fill these in for your network ----
 const char *WIFI_SSID = "YOUR_WIFI_SSID";
 const char *WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
-// ---- Pins bridging to the doorbell Arduino ----
+// ---- Pins bridging to the doorbell ESP32-S3 controller ----
 const int RING_IN_PIN = 13;      // HIGH while the doorbell button is pressed
-const int UNLOCK_OUT_PIN = 12;   // pulsed HIGH to tell the Arduino to fire the relay
+const int UNLOCK_OUT_PIN = 12;   // pulsed HIGH to tell the ESP32-S3 to turn the lock servo
 const unsigned long UNLOCK_PULSE_MS = 800;
 
 // ---- Defaults (overridden by whatever was last saved via /settings) ----
@@ -168,7 +169,7 @@ void handleUnlock() {
 
 // Testing aid, not part of the app's contract: starts a ring session the
 // same way a real RING_IN_PIN edge would, so you can test the camera +
-// app pipeline before the Arduino/button are wired up at all.
+// app pipeline before the ESP32-S3/button are wired up at all.
 // Accepts GET too so it can be triggered by just opening the URL in a browser:
 //   http://<esp32-ip>/debug/ring
 void handleDebugRing() {

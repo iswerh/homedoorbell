@@ -1,7 +1,8 @@
 # homedoorbell
 
-Companion app for a homemade smart doorbell (ESP32-CAM camera + Arduino door-lock
-relay). React Native + Expo (TypeScript), Expo Router with a bottom-tab layout.
+Companion app for a homemade smart doorbell (ESP32-CAM camera + ESP32-S3
+controller driving a servo door lock). React Native + Expo (TypeScript),
+Expo Router with a bottom-tab layout.
 
 **Local-network MVP**: the app talks directly to the doorbell's IP over WiFi —
 no cloud, no push notifications. Alerts only fire while the app is open and
@@ -81,7 +82,7 @@ GET  /stream     -> MJPEG multipart stream (multipart/x-mixed-replace)
 GET  /capture    -> single JPEG snapshot
 GET  /settings   -> { brightness, contrast, saturation, streamDurationSec }
 POST /settings   -> update the above
-POST /unlock     -> pulses the relay; ends the stream session
+POST /unlock     -> actuates the door lock; ends the stream session
 ```
 
 The only place this contract is consumed is `src/api/doorbellClient.ts` — point
